@@ -323,8 +323,8 @@ class OffensiveQLearningAgent(QLearningCaptureAgent):
                     reward += distFromStart + myPosition[0]
                 else:
                     reward += distFromStart - myPosition[0]
-                if nextNumWalls == 0:
-                    reward -= distToFood
+                if nextNumWalls == 0 or nextNumWalls <= currentNumWalls:
+                    reward -= min(distToFood, distToCapsule)
                 else:
                     if nextNumWalls >= currentNumWalls:
                         reward -= distToFood * nextNumWalls
@@ -344,6 +344,8 @@ class OffensiveQLearningAgent(QLearningCaptureAgent):
                     else:
                         if nextNumWalls >= currentNumWalls:
                             reward -= distToFood * nextNumWalls
+                    if distToGhost < 3:
+                        reward -= self.gridWidth * 2
             else:
                 reward += distToGhost                       # Shouldn't happen
 
